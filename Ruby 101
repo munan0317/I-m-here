@@ -1,0 +1,185 @@
+Histogram
+
+puts "Give me some suger:"
+text = gets.chomp
+
+words = text.split(" ")
+
+frequencies = Hash.new (0)
+words.each {|word| frequencies[word] += 1}
+frequencies = frequencies.sort_by {|a, b| b}
+frequencies.reverse!
+frequencies.each {|word, frequencies| puts word + " " + frequencies.to_s}
+
+Prime number
+
+def prime(n)
+  puts "That's not an integer." unless n.is_a? Integer
+  is_prime = true
+  for i in 2..n-1
+    if n % i == 0
+      is_prime = false
+    end
+  end
+  if is_prime
+    puts "#{n} is prime!"
+  else
+    puts "#{n} is not prime."
+  end
+end
+
+prime(2)
+prime(9)
+prime(11)
+prime(51)
+prime(97)
+
+Sort
+
+#.sort returns a sorted array while leaving the original array along, .sort! modifies the actual array
+
+def alphabetize(arr, rev=false) #rev: default value
+  if rev
+    arr.sort { |item1, item2| item2 <=> item1 } 
+  else
+    arr.sort { |item1, item2| item1 <=> item2 }
+  end
+end
+
+books = ["Heart of Darkness", "Code Complete", "The Lorax", "The Prophet", "Absalom, Absalom!"]
+
+puts "A-Z: #{alphabetize(books)}"
+puts "Z-A: #{alphabetize(books, true)}"
+
+Iterating over hashes
+
+matz = { "First name" => "Yukihiro",
+  "Last name" => "Matsumoto",
+  "Age" => 47,
+  "Nationality" => "Japanese",
+  "Nickname" => "Matz"
+}
+
+matz.each do |key, value|
+    puts value
+end
+
+Creat Nil
+
+no_nil_hash = Hash.new("Nan Mu")
+
+Symbols:
+
+#1.They're immutable, meaning they can't be changed once they're created;
+#2.Only one copy of any symbol exists at a given time, so they save memory;
+#3.Symbol-as-keys are faster than strings-as-keys because of the above two reasons.
+
+symbol_hash = {
+  :one => 1,
+  :two => "ttt",    # Fill in these two blanks!
+  :three => 773,
+}
+
+Converting between Symbols and Strings
+
+#.intern is tha same as .to_sym
+
+strings = ["HTML", "CSS", "JavaScript", "Python", "Ruby"]
+
+symbols = []
+
+strings.each do |s| 
+    s = s.to_sym
+    symbols.push(s)
+end
+
+Hashes and Symbols
+
+require 'benchmark'
+
+string_AZ = Hash[("a".."z").to_a.zip((1..26).to_a)]
+symbol_AZ = Hash[(:a..:z).to_a.zip((1..26).to_a)]
+
+string_time = Benchmark.realtime do
+  100_000.times { string_AZ["r"] }
+end
+
+symbol_time = Benchmark.realtime do
+  100_000.times { symbol_AZ[:r] }
+end
+
+puts "String time: #{string_time} seconds."
+puts "Symbol time: #{symbol_time} seconds."
+
+Selective
+
+movie_ratings = {
+  memento: 3,
+  primer: 3.5,
+  the_matrix: 5,
+  truman_show: 4,
+  red_dawn: 1.5,
+  skyfall: 4,
+  alex_cross: 2,
+  uhf: 1,
+  lion_king: 3.5
+}
+# Add your code below!
+
+good_movies = movie_ratings.select {|name, grade| grade>3}
+
+A night at the movies
+
+movies = {
+  Memento: 3,
+  Primer: 4,
+  Ishtar: 1
+}
+
+puts "What would you like to do?"
+puts "-- Type 'add' to add a movie."
+puts "-- Type 'update' to update a movie."
+puts "-- Type 'display' to display all movies."
+puts "-- Type 'delete' to delete a movie."
+
+choice = gets.chomp.downcase
+case choice
+when 'add'
+  puts "What movie do you want to add?"
+  title = gets.chomp
+  if movies[title.to_sym].nil?
+    puts "What's the rating? (Type a number 0 to 4.)"
+    rating = gets.chomp
+    movies[title.to_sym] = rating.to_i
+    puts "#{title} has been added with a rating of #{rating}."
+  else
+    puts "That movie already exists! Its rating is #{movies[title.to_sym]}."
+  end
+when 'update'
+  puts "What movie do you want to update?"
+  title = gets.chomp
+  if movies[title.to_sym].nil?
+    puts "Movie not found!"
+  else
+    puts "What's the new rating? (Type a number 0 to 4.)"
+    rating = gets.chomp
+    movies[title.to_sym] = rating.to_i
+    puts "#{title} has been updated with new rating of #{rating}."
+  end
+when 'display'
+  movies.each do |movie, rating|
+    puts "#{movie}: #{rating}"
+  end
+when 'delete'
+  puts "What movie do you want to delete?"
+  title = gets.chomp
+  if movies[title.to_sym].nil?
+    puts "Movie not found!"
+  else
+    movies.delete(title.to_sym)
+    puts "#{title} has been removed."
+  end
+else
+  puts "Sorry, I didn't understand you."
+end
+
